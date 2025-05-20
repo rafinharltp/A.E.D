@@ -5,6 +5,14 @@ public class Arvore {
         return 1 + contarNos(node.esquerda) + contarNos(node.direita);
     }
 
+    public void preOrdem(No node) {
+        if (node != null) {
+            System.out.print(node.valor + " ");
+            preOrdem(node.esquerda);
+            preOrdem(node.direita);
+        }
+    }
+
     public static void main(String[] args) {
 
         No a = new No("A");
@@ -24,5 +32,8 @@ public class Arvore {
         int totalNos = arvore.contarNos(a);
 
         System.out.println("Total de nos na arvore: " + totalNos);
+
+        System.out.print("Pré-ordem: ");
+        arvore.preOrdem(a);
     }
 }
