@@ -5,11 +5,11 @@ public class Arvore {
         return 1 + contarNos(node.esquerda) + contarNos(node.direita);
     }
 
-    public void preOrdem(No node) {
+    public void emOrdem(No node) {
         if (node != null) {
+            emOrdem(node.esquerda);
             System.out.print(node.valor + " ");
-            preOrdem(node.esquerda);
-            preOrdem(node.direita);
+            emOrdem(node.direita);
         }
     }
 
@@ -33,7 +33,7 @@ public class Arvore {
 
         System.out.println("Total de nos na arvore: " + totalNos);
 
-        System.out.print("Pré-ordem: ");
-        arvore.preOrdem(a);
+        System.out.print("Em ordem: ");
+        arvore.emOrdem(a);
     }
 }
