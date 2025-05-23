@@ -1,3 +1,6 @@
+import java.util.LinkedList;
+import java.util.Queue;
+
 public class Arvore {
 
     public int contarNos(No node) {
@@ -5,11 +8,18 @@ public class Arvore {
         return 1 + contarNos(node.esquerda) + contarNos(node.direita);
     }
 
-    public void posOrdem(No node) {
-        if (node != null) {
-            posOrdem(node.esquerda);
-            posOrdem(node.direita);
-            System.out.print(node.valor + " ");
+    public void buscaEmNivel(No raiz) {
+        if (raiz == null) return;
+
+        Queue<No> fila = new LinkedList<>();
+        fila.add(raiz);
+
+        while (!fila.isEmpty()) {
+            No atual = fila.poll();
+            System.out.print(atual.valor + " ");
+
+            if (atual.esquerda != null) fila.add(atual.esquerda);
+            if (atual.direita != null) fila.add(atual.direita);
         }
     }
 
@@ -33,7 +43,7 @@ public class Arvore {
 
         System.out.println("Total de nos na arvore: " + totalNos);
 
-        System.out.print("Pós-ordem: ");
-        arvore.posOrdem(a);
+        System.out.print("Busca em nível: ");
+        arvore.buscaEmNivel(a);
     }
 }
