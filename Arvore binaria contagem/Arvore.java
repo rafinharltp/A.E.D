@@ -1,20 +1,31 @@
+import java.util.LinkedList;
+import java.util.Queue;
+
 public class Arvore {
 
-    public int contarNos(No node) {
-        if (node == null) return 0;
-        return 1 + contarNos(node.esquerda) + contarNos(node.direita);
-    }
-    
-    public int contarNosFolha(No node) {
-        if (node == null) return 0;
-        if (node.esquerda == null && node.direita == null) {
-            return 1;
+    public int contarNos(No raiz) {
+        if (raiz == null) return 0;
+
+        Queue<No> fila = new LinkedList<>();
+        fila.add(raiz);
+
+        int contador = 0;
+        while (!fila.isEmpty()) {
+            No atual = fila.poll();
+            contador++;
+
+            if (atual.esquerda != null) {
+                fila.add(atual.esquerda);
+            }
+            if (atual.direita != null) {
+                fila.add(atual.direita);
+            }
         }
-        return contarNosFolha(node.esquerda) + contarNosFolha(node.direita);
+
+        return contador;
     }
 
     public static void main(String[] args) {
-
         No a = new No("A");
         No b = new No("B");
         No c = new No("C");
@@ -23,16 +34,14 @@ public class Arvore {
         No f = new No("F");
 
         a.esquerda = b;
-        a.direita = c;
+        a.direita  = c;
         b.esquerda = d;
-        b.direita = e;
-        c.direita = f;
+        b.direita  = e;
+        c.direita  = f;
 
         Arvore arvore = new Arvore();
         int totalNos = arvore.contarNos(a);
-        int totalFolhas = arvore.contarNosFolha(a);
 
-        System.out.println("Total de nos na arvore: " + totalNos);
-        System.out.println("Total de nos folha: " + totalFolhas);
+        System.out.println("Total de nós na árvore: " + totalNos);
     }
 }
