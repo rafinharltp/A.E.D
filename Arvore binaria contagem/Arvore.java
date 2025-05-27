@@ -1,26 +1,16 @@
-import java.util.LinkedList;
-import java.util.Queue;
-
 public class Arvore {
 
     public int contarNos(No node) {
         if (node == null) return 0;
         return 1 + contarNos(node.esquerda) + contarNos(node.direita);
     }
-
-    public void buscaEmNivel(No raiz) {
-        if (raiz == null) return;
-
-        Queue<No> fila = new LinkedList<>();
-        fila.add(raiz);
-
-        while (!fila.isEmpty()) {
-            No atual = fila.poll();
-            System.out.print(atual.valor + " ");
-
-            if (atual.esquerda != null) fila.add(atual.esquerda);
-            if (atual.direita != null) fila.add(atual.direita);
+    
+    public int contarNosFolha(No node) {
+        if (node == null) return 0;
+        if (node.esquerda == null && node.direita == null) {
+            return 1;
         }
+        return contarNosFolha(node.esquerda) + contarNosFolha(node.direita);
     }
 
     public static void main(String[] args) {
@@ -40,10 +30,9 @@ public class Arvore {
 
         Arvore arvore = new Arvore();
         int totalNos = arvore.contarNos(a);
+        int totalFolhas = arvore.contarNosFolha(a);
 
         System.out.println("Total de nos na arvore: " + totalNos);
-
-        System.out.print("Busca em nível: ");
-        arvore.buscaEmNivel(a);
+        System.out.println("Total de nos folha: " + totalFolhas);
     }
 }
