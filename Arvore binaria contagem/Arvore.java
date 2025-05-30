@@ -1,23 +1,25 @@
-import java.util.Stack;
+import java.util.LinkedList;
+import java.util.Queue;
 
 public class Arvore {
 
     public int contarNos(No raiz) {
         if (raiz == null) return 0;
 
-        Stack<No> pilha = new Stack<>();
-        pilha.push(raiz);
+        Queue<No> fila = new LinkedList<>();
+        fila.add(raiz);
 
         int contador = 0;
-        while (!pilha.isEmpty()) {
-            No atual = pilha.pop();
+
+        while (!fila.isEmpty()) {
+            No atual = fila.poll();
             contador++;
 
-            if (atual.direita != null) {
-                pilha.push(atual.direita);
-            }
             if (atual.esquerda != null) {
-                pilha.push(atual.esquerda);
+                fila.add(atual.esquerda);
+            }
+            if (atual.direita != null) {
+                fila.add(atual.direita);
             }
         }
 
