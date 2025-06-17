@@ -1,67 +1,74 @@
 public class Arvore {
+    private static final boolean VERMELHO = true;
+    private static final boolean PRETO = false;
+
+    class No {
+        int valor;
+        No esquerda, direita;
+        boolean cor;
+
+        No(int valor) {
+            this.valor = valor;
+            this.cor = VERMELHO;
+        }
+    }
+
     No raiz;
 
-    public No inserir(No no, int valor) {
-        if (no == null) return new No(valor);
-
-        if (valor < no.valor) {
-            no.esquerda = inserir(no.esquerda, valor);
-        } else if (valor > no.valor) {
-            no.direita = inserir(no.direita, valor);
-        } else {
-            return no;
-        }
-
-        no.altura = 1 + Math.max(altura(no.esquerda), altura(no.direita));
-        int balance = altura(no.esquerda) - altura(no.direita);
-
-        if (balance > 1 && valor < no.esquerda.valor)
-            return rotacaoDireita(no);
-
-        if (balance < -1 && valor > no.direita.valor)
-            return rotacaoEsquerda(no);
-
-        if (balance > 1 && valor > no.esquerda.valor) {
-            no.esquerda = rotacaoEsquerda(no.esquerda);
-            return rotacaoDireita(no);
-        }
-
-        if (balance < -1 && valor < no.direita.valor) {
-            no.direita = rotacaoDireita(no.direita);
-            return rotacaoEsquerda(no);
-        }
-
-        return no;
+    private boolean ehVermelho(No no) {
+        if (no == null) return false;
+        return no.cor == VERMELHO;
     }
 
-    private int altura(No no) {
-        return (no == null) ? 0 : no.altura;
-    }
-
-    private No rotacaoDireita(No y) {
-        No x = y.esquerda;
-        No t2 = x.direita;
-
-        x.direita = y;
-        y.esquerda = t2;
-
-        y.altura = 1 + Math.max(altura(y.esquerda), altura(y.direita));
-        x.altura = 1 + Math.max(altura(x.esquerda), altura(x.direita));
-
+    private No rotacaoEsquerda(No h) {
+        No x = h.direita;
+        h.direita = x.esquerda;
+        x.esquerda = h;
+        x.cor = h.cor;
+        h.cor = VERMELHO;
         return x;
     }
 
-    private No rotacaoEsquerda(No x) {
-        No y = x.direita;
-        No t2 = y.esquerda;
+    private No rotacaoDireita(No h) {
+        No x = h.esquerda;
+        h.esquerda = x.direita;
+        x.direita = h;
+        x.cor = h.cor;
+        h.cor = VERMELHO;
+        return x;
+    }
 
-        y.esquerda = x;
-        x.direita = t2;
+    private void trocaCor(No h) {
+        h.cor = VERMELHO;
+        if (h.esquerda != null) h.esquerda.cor = PRETO;
+        if (h.direita != null) h.direita.cor = PRETO;
+    }
 
-        x.altura = 1 + Math.max(altura(x.esquerda), altura(x.direita));
-        y.altura = 1 + Math.max(altura(y.esquerda), altura(y.direita));
+    public No inserir(No h, int valor) {
+        if (h == null) return new No(valor);
 
-        return y;
+        if (valor < h.valor) {
+            h.esquerda = inserir(h.esquerda, valor);
+        } else if (valor > h.valor) {
+            h.direita = inserir(h.direita, valor);
+        }
+
+        if (ehVermelho(h.direita) && !ehVermelho(h.esquerda)) {
+            h = rotacaoEsquerda(h);
+        }
+        if (ehVermelho(h.esquerda) && ehVermelho(h.esquerda.esquerda)) {
+            h = rotacaoDireita(h);
+        }
+        if (ehVermelho(h.esquerda) && ehVermelho(h.direita)) {
+            trocaCor(h);
+        }
+
+        return h;
+    }
+
+    public void inserir(int valor) {
+        raiz = inserir(raiz, valor);
+        raiz.cor = PRETO;
     }
 
     public void percursoEmOrdem(No no) {
@@ -93,18 +100,18 @@ public class Arvore {
         int[] chaves = {10, 20, 30, 40, 50, 25};
 
         for (int chave : chaves) {
-            arvore.raiz = arvore.inserir(arvore.raiz, chave);
+            arvore.inserir(chave);
         }
 
-        System.out.println("Percurso em ordem da árvore AVL:");
+        System.out.println("Percurso em ordem da árvore Rubro-Negra:");
         arvore.percursoEmOrdem(arvore.raiz);
         System.out.println();
 
-        System.out.println("Percurso pré-ordem da árvore AVL:");
+        System.out.println("Percurso pré-ordem da árvore Rubro-Negra:");
         arvore.percursoPreOrdem(arvore.raiz);
         System.out.println();
 
-        System.out.println("Percurso pós-ordem da árvore AVL:");
+        System.out.println("Percurso pós-ordem da árvore Rubro-Negra:");
         arvore.percursoPosOrdem(arvore.raiz);
         System.out.println();
     }
